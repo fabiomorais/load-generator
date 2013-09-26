@@ -15,7 +15,6 @@ def get_ncpus():
 def is_cpu_value_available():
 	return bool(QUEUE)
 
-
 def get_cpu_value():
    	return QUEUE.popleft()
 
@@ -24,6 +23,7 @@ def put_cpu_value(item):
 
 def run_process(cpu_util, ncpus):
 	return subprocess.Popen(['lookbusy', '--ncpus', ncpus, '--cpu-util', cpu_util])
+
 
 @app.route('/level')
 def cpu_level():
@@ -60,7 +60,6 @@ class CPULoaderClient(t.Thread):
 
 			
 if __name__ == '__main__':
-	
 	
 	ncpus	= get_ncpus()
 	delay	= int(sys.argv[1])
