@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2013 Anton Beloglazov
+# Copyright 2012 Anton Beloglazov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +15,12 @@
 # limitations under the License.
 
 wget http://www.devin.com/lookbusy/download/lookbusy-1.4.tar.gz
-
 tar -xzf lookbusy-1.4.tar.gz
-
 cd lookbusy-1.4
 ./configure
-
 make
 sudo make install
-
 cd ../
-
 rm -rf lookbusy-1.4*
-
 echo
 echo 'Done'
