@@ -32,7 +32,7 @@ def cpu_level():
 	put_cpu_value(cpu_util)
 	return "Ok"
 
-class CPULoader(t.Thread):
+class CPULoaderClient(t.Thread):
 
 	delay    = None
 	process  = None
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 	ncpus	= get_ncpus()
 	delay	= int(sys.argv[1])
 	
-	cpu_loader = CPULoader(delay, ncpus)
+	cpu_loader = CPULoaderClient(delay, ncpus)
 	cpu_loader.start()
 
 	app.run(host='0.0.0.0')
