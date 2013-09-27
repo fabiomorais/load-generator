@@ -2,12 +2,16 @@ import threading as t
 import time
 import subprocess
 import sys
+import logging
 
 from flask import Flask, request
 from collections import deque
 
 app      = Flask(__name__)		
 QUEUE    = deque()
+
+logging.basicConfig(filename='log/generator_client.log',level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 def get_ncpus():
 	return str(subprocess.Popen(['nproc'], stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()[0])
@@ -22,6 +26,7 @@ def put_cpu_value(item):
 	QUEUE.append(item)
 
 def run_process(cpu_util, ncpus):
+	logging.info('Running lookbusy: ncpus=' + ncpus + ' cpu_util=' + cpu_util)
 	return subprocess.Popen(['lookbusy', '--ncpus', ncpus, '--cpu-util', cpu_util])
 
 
@@ -48,13 +53,13 @@ class CPULoaderClient(t.Thread):
 			
 			while not is_cpu_value_available():
 
-				print "sleep"
 				time.sleep(self.delay)
 			
 			cpu_util    = get_cpu_value()
 			tmp_process = run_process(cpu_util, self.ncpus)
 			
 			if(self.process != None):
+				logging.info('Terminating lookbusy: pid=' + self.process.pid)
 				self.process.terminate()
 				self.process = tmp_process
 
