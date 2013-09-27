@@ -2,7 +2,7 @@ import cStringIO
 import pycurl
 import subprocess
 
-master_key = 'python load_generator_client.py'
+master_key = 'load_generator_client.py'
 second_key = 'lookbusy'
 
 pids = []

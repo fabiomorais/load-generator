@@ -25,7 +25,7 @@ def is_ips_list_available():
 	return bool(QUEUE)
 
 def get_put_load_url(ip, cpu_util):
-	return 'http://' + ip + ':5000/level?cpu_util=' + cpu_util
+	return 'http://' + ip + ':5555/level?cpu_util=' + cpu_util
 
 def send_load(ip, cpu_util):
 	
@@ -54,16 +54,16 @@ def get_metric_value(metric_type, file_name):
 		cpu_util = 0
     		if rownum == 0:
 			header = row
-			col_index = header[0].split(';').index('"' + col_name + '"')
+			col_index = header.index(col_name)
     		else:
-			yield row[0].split(';')[col_index]
+			yield row[col_index]
 
 		rownum += 1
 
 def generate_load(ips_list, metric_util, metric_type):
 	
 	for ip in ips_list:
-		send_load(ip, cpu_util)
+		send_load(ip, metric_util)
 		logging.info(metric_type + ': ' + metric_util + ' -> ' + ip)
 
 @app.route('/update')
@@ -121,4 +121,4 @@ if __name__ == '__main__':
 	cpu_loader = CPULoaderServer(delay, metric_type, metric_file)
 	cpu_loader.start()
 
-	app.run('0.0.0.0')
+	app.run('0.0.0.0', port=5555)
