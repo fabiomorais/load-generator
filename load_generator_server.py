@@ -13,7 +13,9 @@ from collections import deque
 app      = Flask(__name__)		
 QUEUE    = deque()
 
-logging.basicConfig(filename=os.getcwd() + '/log/generator_client.log',level=logging.DEBUG)
+log_file_path = str(os.getcwd() + '/log/generator_client.log')
+
+logging.basicConfig(filename=log_file_path,level=logging.DEBUG)
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 def get_ips_list():
