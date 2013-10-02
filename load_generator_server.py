@@ -68,7 +68,7 @@ def generate_load(ips_list, metric_util, metric_type):
 	
 	for ip in ips_list:
 		send_load(ip, metric_util)
-		logging.info(metric_type + ': ' + metric_util + ' -> ' + ip)
+		logging.info(metric_type + ': ' + str(metric_util) + ' -> ' + ip)
 
 @app.route('/update')
 def update_ips():
