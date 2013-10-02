@@ -3,6 +3,7 @@ import time
 import subprocess
 import sys
 import logging
+import os
 
 from flask import Flask, request
 from collections import deque
@@ -10,7 +11,7 @@ from collections import deque
 app      = Flask(__name__)		
 QUEUE    = deque()
 
-logging.basicConfig(filename='log/generator_client.log',level=logging.DEBUG)
+logging.basicConfig(filename=os.getcwd() + '/log/generator_client.log',level=logging.DEBUG)
 logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 
 def get_ncpus():
