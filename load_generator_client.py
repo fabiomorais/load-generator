@@ -61,10 +61,12 @@ class CPULoaderClient(t.Thread):
 			cpu_util    = get_cpu_value()
 			tmp_process = run_process(cpu_util, self.ncpus)
 			
-			if(self.process != None):
-				logging.info('Terminating lookbusy: pid=' + self.process.pid)
+			logging.info('Terminating lookbusy: pid=' + self.process.pid)
+				
+			if(self.process != None ):
 				self.process.terminate()
-				self.process = tmp_process
+	
+			self.process = tmp_process
 
 			
 if __name__ == '__main__':
