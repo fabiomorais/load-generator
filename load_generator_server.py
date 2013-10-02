@@ -29,7 +29,7 @@ def is_ips_list_available():
 	return bool(QUEUE)
 
 def get_put_load_url(ip, cpu_util):
-	return 'http://' + ip + ':5555/level?cpu_util=' + cpu_util
+	return 'http://' + ip + ':5555/level?cpu_util=' + str(cpu_util)
 
 def send_load(ip, cpu_util):
 	
@@ -60,7 +60,7 @@ def get_metric_value(metric_type, file_name):
 			header = row
 			col_index = header.index(col_name)
     		else:
-			yield ceil(float(row[col_index]))
+			yield 	int(ceil(float(row[col_index])))
 
 		rownum += 1
 
