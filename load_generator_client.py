@@ -6,6 +6,7 @@ import logging
 import os
 import signal
 
+from math import ceil, floor
 from flask import Flask, request
 from collections import deque
 
@@ -40,7 +41,7 @@ def kill_process(pid):
 @app.route('/level')
 def cpu_level():
 	
-	cpu_util = str(request.args.get('cpu_util'))
+	cpu_util = str(int(floor(float(request.args.get('cpu_util')))))
 	put_cpu_value(cpu_util)
 	return "Ok"
 
@@ -69,8 +70,7 @@ class CPULoaderClient(t.Thread):
 				logging.info('Lookbusy process terminated: pid=' + str(self.process.pid))
 				
 			self.process = run_process(cpu_util, self.ncpus)
-
-			
+						
 if __name__ == '__main__':
 	
 	ncpus	= get_ncpus()

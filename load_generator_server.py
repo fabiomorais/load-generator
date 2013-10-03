@@ -7,7 +7,6 @@ import csv
 import logging
 import os
 
-from math import ceil
 from flask import Flask, request
 from collections import deque
 
@@ -57,10 +56,10 @@ def get_metric_value(metric_type, file_name):
 
 		cpu_util = 0
     		if rownum == 0:
-			header = row
-			col_index = header.index(col_name)
+				header = row
+				col_index = header.index(col_name)
     		else:
-			yield 	int(ceil(float(row[col_index])))
+				yield 	row[col_index]
 
 		rownum += 1
 
