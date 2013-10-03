@@ -15,8 +15,9 @@ QUEUE    = deque()
 
 log_file_path = str(os.getcwd() + '/log/generator_client.log')
 
-logging.basicConfig(filename=log_file_path,level=logging.DEBUG)
-logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(filename=log_file_path,level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  datefmt='%Y-%m-%d %H:%M:%S')
+
+logger = logging.getLogger('generator_client')
 
 def get_ncpus():
 	return str(int(subprocess.Popen(['nproc'], stderr=subprocess.PIPE, stdout=subprocess.PIPE).communicate()[0]))
@@ -31,7 +32,7 @@ def put_cpu_value(item):
 	QUEUE.append(item)
 
 def run_process(cpu_util, ncpus):
-	logging.info('Running lookbusy process: ncpus=' + ncpus + ' cpu_util=' + cpu_util)
+	logger.info('Running lookbusy process: ncpus=' + ncpus + ' cpu_util=' + cpu_util)
 	return subprocess.Popen(['lookbusy', '--ncpus', ncpus, '--cpu-util', cpu_util])
 	
 def kill_process(pid):
@@ -67,7 +68,7 @@ class CPULoaderClient(t.Thread):
 
 			if self.process != None:
 				self.process.terminate()
-				logging.info('Lookbusy process terminated: pid=' + str(self.process.pid))
+				logger.info('Lookbusy process terminated: pid=' + str(self.process.pid))
 				
 			self.process = run_process(cpu_util, self.ncpus)
 						

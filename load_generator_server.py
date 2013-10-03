@@ -13,10 +13,11 @@ from collections import deque
 app      = Flask(__name__)		
 QUEUE    = deque()
 
-log_file_path = str(os.getcwd() + '/log/generator_client.log')
+log_file_path = str(os.getcwd() + '/log/generator_server.log')
 
-logging.basicConfig(filename=log_file_path,level=logging.DEBUG)
-logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+logging.basicConfig(filename=log_file_path,level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',  datefmt='%Y-%m-%d %H:%M:%S')
+
+logger = logging.getLogger('generator_server')
 
 def get_ips_list():
 	return QUEUE.popleft()
@@ -67,7 +68,7 @@ def generate_load(ips_list, metric_util, metric_type):
 	
 	for ip in ips_list:
 		send_load(ip, metric_util)
-		logging.info(metric_type + ': ' + str(metric_util) + ' -> ' + ip)
+		logger.info(metric_type + ': ' + str(metric_util) + ' -> ' + ip)
 
 @app.route('/update')
 def update_ips():
@@ -100,8 +101,6 @@ class CPULoaderServer(t.Thread):
 
 		while self.is_active: 
 			
-			time.sleep(self.delay)
-
 			if is_ips_list_available():
 				self.ips_list = list(get_ips_list())
 			
@@ -112,8 +111,10 @@ class CPULoaderServer(t.Thread):
 				if cpu_util != None:
 					generate_load(self.ips_list, cpu_util, self.metric_type)
 				else:
-					logging.warning('No more metric values')
+					logger.warning('No more metric values')
 					self.is_active = False
+
+			time.sleep(self.delay)
 
 if __name__ == '__main__':
 	
