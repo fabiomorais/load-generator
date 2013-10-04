@@ -81,6 +81,7 @@ def update_ips():
 class CPULoaderServer(t.Thread):
 
 	delay        = None
+	periodicy    = None
 	process      = None
 	metric_yield = None
 	metric_type  = None
@@ -88,10 +89,11 @@ class CPULoaderServer(t.Thread):
 	is_active    = None
 	ips_list     = []
 
-	def __init__(self, delay, metric_type, metric_file):
+	def __init__(self, periodicy, metric_type, metric_file):
 		t.Thread.__init__(self)
 
-		self.delay   	  = delay
+		self.delay   	  = 1
+		self.periodicy    = periodicy
 		self.metric_type  = metric_type
 		self.metric_file  = metric_file
 		self.metric_yield = get_metric_value(self.metric_type, self.metric_file)
@@ -101,8 +103,11 @@ class CPULoaderServer(t.Thread):
 
 		while self.is_active: 
 			
+			time.sleep(self.delay)
+
 			if is_ips_list_available():
 				self.ips_list = list(get_ips_list())
+				self.delay = self.periodicy
 			
 			if len(self.ips_list) > 0:
 				
@@ -113,8 +118,6 @@ class CPULoaderServer(t.Thread):
 				else:
 					logger.warning('No more metric values')
 					self.is_active = False
-
-			time.sleep(self.delay)
 
 if __name__ == '__main__':
 	
