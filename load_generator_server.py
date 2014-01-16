@@ -98,6 +98,7 @@ class CPULoaderServer(t.Thread):
 		self.metric_file  = metric_file
 		self.metric_yield = get_metric_value(self.metric_type, self.metric_file)
 		self.is_active    = True
+		self.error		  = 0.5
 
 	def run(self):
 
@@ -114,7 +115,7 @@ class CPULoaderServer(t.Thread):
 				cpu_util = next(self.metric_yield, None)
 				
 				if cpu_util != None:
-					generate_load(self.ips_list, cpu_util, self.metric_type)
+					generate_load(self.ips_list, str(float(cpu_util) - self.error), self.metric_type)
 				else:
 					logger.warning('No more metric values')
 					self.is_active = False
